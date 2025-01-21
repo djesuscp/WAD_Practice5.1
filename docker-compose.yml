@@ -2,8 +2,7 @@ version: '3.4'
 
 services:
   mysql:
-    image: mysql
-    command: --default-authentication-plugin=mysql_native_password
+    image: mysql:9.1
     ports: 
       - 3306:3306
     environment: 
@@ -18,7 +17,7 @@ services:
     restart: always
   
   phpmyadmin:
-    image: phpmyadmin
+    image: phpmyadmin:5.2.1
     ports:
       - 8080:80
     environment: 
@@ -31,7 +30,7 @@ services:
       - mysql
 
   prestashop:
-    image: prestashop/prestashop
+    image: prestashop/prestashop:8
     environment: 
       - DB_SERVER=mysql
     volumes:
@@ -50,7 +49,7 @@ services:
       - 443:443
     restart: always
     environment:
-      DOMAINS: "$DOMAIN -> http://prestashop:80"
+      DOMAINS: "${DOMAIN} -> http://prestashop:80"
       STAGE: 'production' # Don't use production until staging works
       # FORCE_RENEW: 'true'
     networks:
