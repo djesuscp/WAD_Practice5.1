@@ -1,8 +1,71 @@
 # Práctica 5.1: Despliegue de Prestashop con Docker y Docker Compose.
 
-## Instrucciones.
+En primer lugar, se procederá con la instalación de Docker y Docker Compose en un sistema basado en Linux.
 
-### 1. Archivo "docker-compose.yml".
+## 1. Instalación de Docker y Docker Compose.
+
+A continuación, se facilitan una serie de comandos que permitirán al usuario instalar Docker y Docker Compose. Se ha elaborado un script de bash al que se ha llamado ```install_Docker.sh``` para automatizar la instalación.
+
+```
+#!/bin/bash
+
+# Script de instalación de Docker y Docker Compose
+# Referencia: https://docs.docker.com/engine/install/ubuntu/
+
+set -x
+
+# Actualizamos los repositorios
+apt update
+
+# Instalamos los paquetes necesarios para que `apt` pueda usar repositorios sobre HTTPS
+apt install -y \
+    ca-certificates \
+    curl \
+    gnupg \
+    lsb-release
+
+# Añadimos la clave GPG oficial de Docker
+mkdir -p /etc/apt/keyrings
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+
+# Añadimos el repositorio oficial de Docker a nuestro sistema
+echo \
+  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+  $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+
+# Actualizamos la lista de paquetes
+apt update
+
+# Instalamos la última versión de Docker y Docker Compose
+apt install -y docker-ce docker-ce-cli containerd.io docker-compose-plugin
+
+# Añadimos el usuario actual al grupo docker
+usermod -aG docker $USER
+
+# Habilitamos el servicio de Docker para que se inicie automáticamente al arrancar el sistema
+systemctl enable docker
+
+# Iniciamos el servicio de Docker
+systemctl start docker
+```
+
+La ejecución del script se ha realizado con permisos de super usuario, es decir: 
+
+- ```sudo ./install_Docker.sh```. Debido a esto, a continuación, se deben ejecutar los siguientes comandos:
+
+- ```sudo usermod -aG docker ubuntu```: esto permite agregar el usuario "ubuntu" al grupo "docker", lo que permitirá ejecutar comandos de Docker sin necesidad de ser super usuario.
+
+- ```newgrp docker```: esto mueve el grupo activo de tu sesión de terminal al grupo docker, evitando que se deba reiniciar la sesión tras haber agregado el usuario "ubuntu" al grupo "docker" con el comando anterior.
+
+- ```docker pull ubuntu```: esto descargará la imagen oficial de Ubuntu desde Docker Hub a la máquina local. Esta imagen será necesaria para crear contenedores Ubuntu con Docker.
+
+![docker1](./screenshots/docker1.jpg)
+
+Finalmente, y para comprobar que Docker Compose está operativo, se ejecutará la instrucción ```docker compose```. Si se muestra la información que se aprecia en la siguiente imagen, significa que todo ha ido como se esperaba.
+
+![docker2](./screenshots/docker2.jpg)
+
+## 2. Archivo "docker-compose.yml".
 
 Se precisa de la creación de un archivo llamado ```docker-compose.yml```, el cual se encargará de realizar todo el despliegue de Prestashop según en siguiente código:
 ```
@@ -76,7 +139,7 @@ A continuación se realizan diversas aclaraciones sobre el código mostrado.
 
 Tal como se puede observar, el archivo se compone de tres apartados: servicios, volúmenes, y redes.
 
-#### 1.1.Servicios.
+### 2.1.Servicios.
 
 Este fragmento del documento determina los contenedores que se van a ejecutar. Cada servicio corresponde a un contenedor o conjunto de contenedores basados en una imagen Docker específica. Dentro de cada servicio, se especificarán configuraciones como:
 
@@ -94,17 +157,17 @@ Este fragmento del documento determina los contenedores que se van a ejecutar. C
 
 - *restart*: determina si el servicio pude reiniciarse, estableciéndose en este caso un reinicio automático que volverá a levantar el contenedor en caso de interrupción de la actividad por cualquier motivo.
 
-#### 1.2. Volúmenes.
+### 2.2. Volúmenes.
 
 Se detallan los volúmenes que se utilizarán para almacenar datos persistentes, es decir, los datos se guardarán incluso si el contenedor se elimina o reinicia. Asimismo, los volúmenes pueden ser compartidos entre múltiples contenedores. En este caso de emplean los volúmenes ```mysql_data``` y ```prestashop_data```.
 
-#### 1.3. Redes.
+### 2.3. Redes.
 
 Este apartado define las redes que los servicios utilizan para comunicarse. Docker Compose gestiona redes internas de manera predeterminada, aunque es posible crear redes con configuraciones personalizadas como, por ejemplo, control de subredes o aislamiento.
 
-### 2. Archivo ".env".
+### 3. Archivo ".env".
 
-Finalmente, será necesar0 ia la creación de un archivo ```.env``` en el que se alamacenarán las siguientes variables:
+Finalmente, será necesaria la creación de un archivo ```.env``` en el que se alamacenarán las siguientes variables:
 ```
 MYSQL_ROOT_PASSWORD=
 MYSQL_DATABASE=prestashop
@@ -121,8 +184,21 @@ Como se puede observar, las variables serán utilizadas por el archivo ```docker
 - ```MYSQL_PASSWORD```: guarda la contraseña del usuario por defecto reflejado enla variable anterior.
 - ```DOMAIN=```: especifica el dominio público empleado por la página.
 
+## 4. Ejecución del archivo "docker-compose.yml".
 
-## Configuración de Prestashop.
+Llegado a este punto, y teniendo los dos archivos necesarios para este procedimiento correctamente preparados (```docker-compose.yml``` y ```.env```), el usuario debe proceder con la ejecución del archivo con extensión "yml" mediante el comando ```docker-compose up -d```. Desgraciadamente, es posible que se muestre un error que informa del desconocimiento de este comando; si es el caso, se deberá instalar el paquete para poder hacer uso de dicho comando, para lo que se debe ejecutar la instrucción ```sudo apt install docker-compose```.
+
+![No se reconoce docker-compose](./screenshots/docker3.jpg)
+
+Una vez hecho esto, ya será posible levantar todo lo dispuesto en el archivo ```docker-compose.yml```, siendo únicamente necesario escribir ```docker-compose up -d``` y pulsar intro.
+
+![Levantar docker-compose](./screenshots/docker4.jpg)
+
+El proceso acabará mostrando lo siguiente por consola.
+
+![Levantar docker-compose](./screenshots/docker5.jpg)
+
+## 4. Configuración de Prestashop.
 
 A continuación se muestran una serie de capturas de pantalla con el objetivo de mostrar los pasos necesarios para completar la configuración inicial de Prestashop una vez se ha levantado el servicio.
 
