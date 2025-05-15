@@ -104,7 +104,7 @@ Este apartado define las redes que los servicios utilizan para comunicarse. Dock
 
 ### 2. Archivo ".env".
 
-Finalmente, será necesaria la creación de un archivo ```.env``` en el que se alamacenarán las siguientes variables:
+Finalmente, será necesar0 ia la creación de un archivo ```.env``` en el que se alamacenarán las siguientes variables:
 ```
 MYSQL_ROOT_PASSWORD=
 MYSQL_DATABASE=prestashop
