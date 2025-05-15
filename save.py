@@ -6,16 +6,16 @@ def run(message, command):
     currentDateFormated = currentDate.strftime("%Y-%m-%d %H:%M:%S")
     try:
         if message == '' and 'commit' not in command:
-            result = subprocess.run(command, text=True, shell=True, check=True, capture_output=True)
+            result = subprocess.run(command, shell=True, check=True)
             if 'add' in command:
-                print(f'Log> Git add -A succesfull.')
+                print(f'Log> \033[1;37mGit add -A\033[0m \033[1;32msuccesfull\033[0m.')
             elif 'push' in command:
-                print(f'Log> Git push completed.')
+                print(f'Log> \033[1;37mGit push\033[0m \033[1;32mcompleted\033[0m.')
         elif message == '' and 'commit' in command:
-            result = subprocess.run(f'{command}"Emergency save dated: {currentDateFormated}"', text=True, shell=True, check=True, capture_output=True)
+            result = subprocess.run(f'{command}"Emergency save dated: {currentDateFormated}"', shell=True, check=True)
             print(f'Log> {result.stdout}')
         else:
-            result = subprocess.run(f'{command}"{message}. Dated: {currentDateFormated}"', text=True, shell=True, check=True, capture_output=True)
+            result = subprocess.run(f'{command}"{message}. Dated: {currentDateFormated}"', shell=True, check=True)
     except subprocess.CalledProcessError as e:
         print(f'Error> {e.stderr}')
 
