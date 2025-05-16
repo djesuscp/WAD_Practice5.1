@@ -1,4 +1,4 @@
-# Práctica 5.1: Despliegue de Prestashop con Docker y Docker Compose.
+# Práctica 5.3: Despliegue de Prestashop con Docker y Docker Compose.
 
 En primer lugar, se procederá con la instalación de Docker y Docker Compose en un sistema basado en Linux.
 
@@ -246,3 +246,17 @@ A continuación se muestran una serie de capturas de pantalla con el objetivo de
 8. La siguiente pantalla se mostrará una vez haya finalizado correctamente la instalación de su tienda.
 
 ![](./screenshots/Screenshot_8.jpg)
+
+![](./screenshots/errorPrestashop.jpg)
+
+![](./screenshots/bash1.jpg)
+
+![](./screenshots/bash2.jpg)
+
+![](./screenshots/prestaShopDeleteInstall.jpg)
+
+![](./screenshots/login1.jpg)
+
+![](./screenshots/login2.jpg)
+
+
