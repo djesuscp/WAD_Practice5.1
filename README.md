@@ -247,15 +247,37 @@ A continuación se muestran una serie de capturas de pantalla con el objetivo de
 
 ![](./screenshots/Screenshot_8.jpg)
 
+9. Ahora, el usuario puede tratar de acceder a su tienda copiando y pegando el dominio que había configurado en su archvio ".env". Sin embargo, lo más probable es que se encuentre con el siguiente error.
+
 ![](./screenshots/errorPrestashop.jpg)
+
+Esto se debe a que, por seguridad y para evitar posibles intrusiones, Prestashop configura automáticamente una dirección de acceso distinta a la típica ```/admin/```, de modo que únicamente el usuario que ha levantado el servicio tiene la posibilidad de acceder a los archivos de configuración y modificar esto a su gusto.
+
+Para ello, en primer lugar, será necesario acceder al contenedor de Prestashop desde la consola, debiendo introducir el comando ```docker exec -it NOMBRE_CONTENEDOR bash```, y siendo necesario escribir los suficientes caracteres pertenecientes al nombre del contenedor para que docker lo identifique sin confusión alguna.
+
+![](./screenshots/bash11.jpg)
+
+En este caso, sabiendo que el nombre del contenedor de Prestashop comienza con "0d", con esto será suficiente para ejecutar el comando que nos permitirá acceder a su interior.
 
 ![](./screenshots/bash1.jpg)
 
-![](./screenshots/bash2.jpg)
+Una vez que se ha accedido al contenedor de Prestashop, y gracias al comando ```ls -la``` que sirve para listar todo el contenido del directorio ```/var/www/html```, se observará una carpeta con un nombre aleatorio precedido de admin, que en este ejemplo es "admin372htidpzzztdzzzjt9". Afortunadamente, y como se ha mencionado anteriormente, el usuario podrá modificar este nombre con el comando ```mv NOMBRE_ACTUAL NOMBRE_NUEVO```, es decir, aquí se ha ejecutado el comando ```mv admin372htidpzzztdzzzjt9 pepeGoteraAdmin```.
+
+Tras realizar esto, el usuario encontrará la siguiente ventana.
 
 ![](./screenshots/prestaShopDeleteInstall.jpg)
 
+Esta es otra medida de seguridad que Prestashop ha implementado, pues si la carpeta ```install``` resaltada en la imagen previa a ésta no se borra, cualquier persona ajena podría acceder a la misma y forzar una reinstalación de todo el servicio que perjudicaría gravemente al usuario que lo ha montado.
+
+Para ello, lo mejor es borrar dicha carpeta con el comando ```rm -rf install```, tal como se aprecia en la siguiente imagen, junto a la modificación del nombre de administrador.
+
+![](./screenshots/bash2.jpg)
+
+Ahora sí, por fin, se mostrará el formulario de Inicio de sesión correctamente.
+
 ![](./screenshots/login1.jpg)
+
+Y tras introducir el usuario y contraseña facilitados durante la configuración de Prestashop, el usuario ya tendrá acceso completo a su servicio.
 
 ![](./screenshots/login2.jpg)
 
