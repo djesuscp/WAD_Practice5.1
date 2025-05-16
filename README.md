@@ -165,7 +165,20 @@ Se detallan los volúmenes que se utilizarán para almacenar datos persistentes,
 
 Este apartado define las redes que los servicios utilizan para comunicarse. Docker Compose gestiona redes internas de manera predeterminada, aunque es posible crear redes con configuraciones personalizadas como, por ejemplo, control de subredes o aislamiento.
 
-### 3. Archivo ".env".
+## 3. Configuración de puertos para la gestión del tráfico en red.
+
+A continuación, y debido a los servicios que se van a levantar en el archivo "docker-compose.yml", tal como se ha visto en el apartado anterior, será necesario abrir los puertos correspondientes con respecto al tráfico de entrada, siendo en este caso:
+
+- ***SSH*** (TCP): puerto ```22```. Permite la conexión por ssh al servidor.
+- ***HTTP*** (TCP): puerto ```80```. Permite acceder al servicio mediante el protocolo HTTP.
+- ***HTTPS*** (TCP): puerto ```443```. Permite acceder al servicio mediante el protocolo HTTPS.
+- ***phpMyAdmin*** (TCP): puerto ```8080```. Permite la comunicación con phpMyAdmin, el gestor web de MySQL.
+
+Además, se debe tener en cuenta que se permitirá todo el tráfico de salida.
+
+![Grupo de seguridad](./screenshots/securityGroup.jpg)
+
+## 4. Archivo ".env".
 
 Finalmente, será necesaria la creación de un archivo ```.env``` en el que se alamacenarán las siguientes variables:
 ```
@@ -184,7 +197,7 @@ Como se puede observar, las variables serán utilizadas por el archivo ```docker
 - ```MYSQL_PASSWORD```: guarda la contraseña del usuario por defecto reflejado enla variable anterior.
 - ```DOMAIN=```: especifica el dominio público empleado por la página.
 
-## 4. Ejecución del archivo "docker-compose.yml".
+## 5. Ejecución del archivo "docker-compose.yml".
 
 Llegado a este punto, y teniendo los dos archivos necesarios para este procedimiento correctamente preparados (```docker-compose.yml``` y ```.env```), el usuario debe proceder con la ejecución del archivo con extensión "yml" mediante el comando ```docker-compose up -d```. Desgraciadamente, es posible que se muestre un error que informa del desconocimiento de este comando; si es el caso, se deberá instalar el paquete para poder hacer uso de dicho comando, para lo que se debe ejecutar la instrucción ```sudo apt install docker-compose```.
 
@@ -198,7 +211,7 @@ El proceso acabará mostrando lo siguiente por consola.
 
 ![Levantar docker-compose](./screenshots/docker5.jpg)
 
-## 4. Configuración de Prestashop.
+## 6. Configuración de Prestashop.
 
 A continuación se muestran una serie de capturas de pantalla con el objetivo de mostrar los pasos necesarios para completar la configuración inicial de Prestashop una vez se ha levantado el servicio.
 
